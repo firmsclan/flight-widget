@@ -51,12 +51,14 @@ function populateTable (){
             for(const letter of letters){
             const div = document.createElement('div')
             div.textContent = letter
+            div.classList.add('flip')
             tableCell.append(div)
             }
             tableRow.append(tableCell)
         }
         tableBody.append(tableRow)
     }
+
 
 }
 populateTable()
