@@ -37,6 +37,10 @@ let flights = [
     remarks: "DELAYED"
   }
 ]
+ 
+const destinations = ["TOKYO", "FRANKFURT", "DUBAI", "LONDON", "OMAN", "BEIRUT"]
+const remarks = ["ON TIME", "DELAYED", "CANCELLED"]
+let hour = 15
 
 function populateTable (){
     for(const flight of flights){
@@ -44,21 +48,67 @@ function populateTable (){
 
         for(const flightDetail in flight){
             const tableCell = document.createElement('td')
-            console.log('flightDetail', flightDetail)
-            const word = (flight[flightDetail])
-            console.log(word)
-            const letters = Array.from(word)
-            for(const letter of letters){
-            const div = document.createElement('div')
-            div.textContent = letter
-            div.classList.add('flip')
-            tableCell.append(div)
+            const word = Array.from(flight[flightDetail])
+
+        for(const [index,letter] of word.entries()){
+            const letterElement = document.createElement('div')
+
+          setTimeout(() =>{
+            letterElement.textContent = letter
+            letterElement.classList.add('flip')
+            tableCell.append(letterElement)
+          },100 * index)
+
+
             }
             tableRow.append(tableCell)
         }
         tableBody.append(tableRow)
     }
 
-
 }
 populateTable()
+
+function genearateRandomNumber(maxNumber){
+ const numbers = '0123456789'
+ if(maxNumber){
+    const newNumbers = numbers.slice(0,maxNumber)
+    return newNumbers.charAt(Math.floor(Math.random()* newNumbers.length))
+ }
+ return numbers.charAt(Math.floor(Math.random()* numbers.length))
+}
+
+function genearateRandomLetter(){
+  const letters = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase()
+  return letters.charAt(Math.floor(Math.random()* letters.length))
+}
+
+function generateTime(){
+  let displayHour = hour;
+  if(hour < 24){
+    hour++
+  }
+  if(hour >= 24){
+      hour = 1
+      displayHour =  hour
+  }
+  if(hour < 10){
+    displayHour = '0' + hour
+  }
+  return displayHour + ':' + genearateRandomNumber(5)  + genearateRandomNumber()
+}
+
+function shuffleUp() {
+  flights.shift()
+  flights.push({
+    time: generateTime(),
+    destination: destinations [Math.floor(Math.random()* destinations.length)],
+    flight: genearateRandomLetter() + genearateRandomLetter() + ' ' + genearateRandomNumber() + genearateRandomNumber(),
+    gate: genearateRandomLetter() + " " + genearateRandomNumber() + genearateRandomNumber(),
+    remarks: remarks[Math.floor(Math.random()* remarks.length)]
+  })
+  tableBody.textContent = ""
+  populateTable()
+  }
+
+  setInterval(shuffleUp, 5000)
